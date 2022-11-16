@@ -25,10 +25,10 @@ export class InvoiceDto implements InvoiceInterface {
   @Type(() => InvoiceDetailDto)
   invoiceDetail: InvoiceDetailDto[];
 
-  constructor(invoice: InvoiceDto) {
-    this.uuid = invoice.uuid ?? randomUUID();
-    this.customerUuid = invoice.customerUuid;
-    this.nit = invoice.nit;
-    this.invoiceDetail = invoice.invoiceDetail;
+  constructor(invoice?: InvoiceDto) {
+    this.uuid = invoice?.uuid ?? randomUUID();
+    this.customerUuid = invoice?.customerUuid ?? '';
+    this.nit = invoice?.nit ?? '';
+    this.invoiceDetail = invoice?.invoiceDetail ?? [];
   }
 }

@@ -20,9 +20,9 @@ export class InvoiceDetailDto implements InvoiceDetailInterface {
   @IsInt()
   price: number;
 
-  constructor(invoice: InvoiceDetailDto) {
+  constructor(invoice?: InvoiceDetailDto) {
     this.uuid = invoice?.uuid ?? randomUUID();
-    this.name = invoice?.name;
-    this.price = invoice?.price;
+    this.name = invoice?.name ?? '';
+    this.price = invoice?.price ?? 0;
   }
 }
