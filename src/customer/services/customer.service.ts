@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { CustomerDto } from '../dto/customer.dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { CustomerGetDto } from '../dto/customer.get.dto';
+import { CustomerPostDto } from '../dto/customer.post.dto';
+import { CustomerPatchDto } from '../dto/customer.patch.dto';
 
 @Injectable()
 export class CustomerService {
-  customers: CustomerDto[] = [
+  customers: CustomerGetDto[] = [
     {
       uuid: '1',
       name: 'duvan',
@@ -17,21 +19,21 @@ export class CustomerService {
       dni: '1090712374',
     },
   ];
-  getAll(): CustomerDto[] {
+  getAll(): CustomerGetDto[] {
     return this.customers;
   }
-  createCustomer(customer: CustomerDto): CustomerDto {
+  createCustomer(customer: CustomerPostDto) {
     this.customers.push(customer);
     return customer;
   }
-  getById(uuid: string): CustomerDto | undefined {
+  getById(uuid: string) {
     return this.customers.find(
-      (customer: CustomerDto) => (customer.uuid = uuid),
+      (customer: CustomerGetDto) => (customer.uuid = uuid),
     );
   }
-  putCustomer(uuid: string, customers: CustomerDto) {
+  putCustomer(uuid: string, customers: CustomerPatchDto) {
     const customer = this.customers.find(
-      (customer: CustomerDto) => (customer.uuid = uuid),
+      (customer: CustomerPatchDto) => (customer.uuid = uuid),
     );
     if (customer != undefined) {
       customer.name = customers.name;
@@ -40,28 +42,26 @@ export class CustomerService {
     }
     return customer;
   }
-  pathCustomer(
-    uuid: string,
-    customerUpdate: CustomerDto,
-  ): CustomerDto | undefined {
+  pathCustomer(uuid: string, customerUpdate: CustomerPatchDto) {
     const customer = this.customers.find(
-      (customer: CustomerDto) => (customer.uuid = uuid),
+      (customer: CustomerPatchDto) => (customer.uuid = uuid),
     );
-    if (customer != undefined) {
-      const customerPatch: CustomerDto = {
-        ...customer,
-        ...customerUpdate,
-      };
-      this.customers = this.customers.map((customer: CustomerDto) => {
-        return customer.uuid == uuid ? customerPatch : customer;
-      });
-      return customerPatch;
+    if (customer == undefined) {
+      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
     }
-    return customer;
+    const customerPatch: CustomerPatchDto = {
+      ...customer,
+      ...customerUpdate,
+    };
+    this.customers = this.customers.map((customer: CustomerPatchDto) => {
+      return customer.uuid == uuid ? customerPatch : customer;
+    });
+    return customerPatch;
   }
+
   deleteCustomers(uuid: string): boolean {
     const deleteCustomers = this.customers.findIndex(
-      (customer: CustomerDto) => (customer.uuid = uuid),
+      (customer: CustomerGetDto) => (customer.uuid = uuid),
     );
     if (deleteCustomers == -1) return false;
     this.customers.splice(deleteCustomers, 1);
