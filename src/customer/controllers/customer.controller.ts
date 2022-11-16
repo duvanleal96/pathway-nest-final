@@ -15,8 +15,8 @@ import { CustomerService } from '../services/customer.service';
 import { CustomerGetDto } from '../dto/customer.get.dto';
 import { CustomerPostDto } from '../dto/customer.post.dto';
 import { CustomerPatchDto } from '../dto/customer.patch.dto';
-import { GuardAuth } from '../guards.auth';
-import { ResponseInterceptor } from '../response.interceptor';
+import { GuardAuth } from '../guards/guards.auth';
+import { ResponseInterceptor } from '../interceptors/response.interceptor';
 @Controller('customer')
 export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}
@@ -65,7 +65,7 @@ export class CustomerController {
     )
     customer: CustomerPatchDto,
   ) {
-    return this.customerService.putCustomer(uuid, customer);
+    return this.customerService.pathCustomer(uuid, customer);
   }
 
   @Delete('/:uuid')

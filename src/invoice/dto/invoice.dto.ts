@@ -8,7 +8,8 @@ import {
 } from 'class-validator';
 import { randomUUID } from 'crypto';
 import { InvoiceDetailDto } from './invoice.detail.dto';
-export class InvoiceDto {
+import { InvoiceInterface } from '../interface/invoice.interface';
+export class InvoiceDto implements InvoiceInterface {
   @IsOptional()
   @IsUUID()
   uuid: string;

@@ -1,6 +1,6 @@
 import { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
-import { CustomerGetDto } from './dto/customer.get.dto';
+import { CustomerGetDto } from '../dto/customer.get.dto';
 
 export class ResponseInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {

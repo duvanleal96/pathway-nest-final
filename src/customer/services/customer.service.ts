@@ -26,28 +26,45 @@ export class CustomerService {
     this.customers.push(customer);
     return customer;
   }
-  getById(uuid: string) {
-    return this.customers.find(
-      (customer: CustomerGetDto) => (customer.uuid = uuid),
+
+  getById(uuid: string): CustomerGetDto {
+    const customer = this.customers.find(
+      (customer: CustomerGetDto) => customer.uuid == uuid,
     );
+    if (customer == undefined) {
+      throw new HttpException(
+        `cliente con uuid ${uuid} no existe`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return customer;
   }
+
   putCustomer(uuid: string, customers: CustomerPatchDto) {
     const customer = this.customers.find(
       (customer: CustomerPatchDto) => (customer.uuid = uuid),
     );
-    if (customer != undefined) {
-      customer.name = customers.name;
-      customer.email = customers.email;
-      customer.dni = customers.dni;
+    if (customer == undefined) {
+      throw new HttpException(
+        `cliente con uuid ${uuid} no existe`,
+        HttpStatus.NOT_FOUND,
+      );
     }
+    customer.name = customers.name;
+    customer.email = customers.email;
+    customer.dni = customers.dni;
     return customer;
   }
+
   pathCustomer(uuid: string, customerUpdate: CustomerPatchDto) {
     const customer = this.customers.find(
-      (customer: CustomerPatchDto) => (customer.uuid = uuid),
+      (customer: CustomerPatchDto) => customer.uuid == uuid,
     );
     if (customer == undefined) {
-      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        `cliente con uuid ${uuid} no existe`,
+        HttpStatus.NOT_FOUND,
+      );
     }
     const customerPatch: CustomerPatchDto = {
       ...customer,
