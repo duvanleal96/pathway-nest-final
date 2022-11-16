@@ -76,4 +76,33 @@ export class InvoiceService {
     invoices.invoiceDetail = invoicesUpdate.invoiceDetail;
     return invoices;
   }
+
+  pathInvoice(uuid: string, invoiceUpdate: InvoiceDto) {
+    const invoice = this.invoice.find(
+      (invoice: InvoiceDto) => invoice.uuid == uuid,
+    );
+    if (invoice == undefined) {
+      throw new HttpException(
+        `cliente con uuid ${uuid} no existe`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    const customerPatch: InvoiceDto = {
+      ...invoice,
+      ...invoiceUpdate,
+    };
+    this.invoice = this.invoice.map((customer: InvoiceDto) => {
+      return customer.uuid == uuid ? customerPatch : customer;
+    });
+    return customerPatch;
+  }
+
+  deleteInvoice(uuid: string): boolean {
+    const deleteInvoice = this.invoice.findIndex(
+      (invoice: InvoiceDto) => (invoice.uuid = uuid),
+    );
+    if (deleteInvoice == -1) return false;
+    this.invoice.splice(deleteInvoice, 1);
+    return true;
+  }
 }

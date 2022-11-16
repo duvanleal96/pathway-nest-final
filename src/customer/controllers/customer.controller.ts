@@ -42,7 +42,7 @@ export class CustomerController {
   }
 
   @Get('/:uuid')
-  getUserByUuid(@Param('uuid') uuid: string) {
+  getCustomerByUuid(@Param('uuid') uuid: string) {
     return this.customerService.getById(uuid);
   }
 
